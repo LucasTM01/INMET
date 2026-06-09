@@ -1,0 +1,8 @@
+cache/
+inmet.db
+inmet.db-wal
+inmet.db-shm
+.venv/
+__pycache__/
+*.pyc
+.idea/
