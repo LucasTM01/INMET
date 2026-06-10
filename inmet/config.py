@@ -5,10 +5,23 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 CACHE_DIR = BASE_DIR / "cache"
 DB_PATH = BASE_DIR / "inmet.db"
+INPUT_DIR = BASE_DIR / "input"
+OUTPUT_DIR = BASE_DIR / "output"
 
-# Fonte de dados
+# Tracking por mina (etapa 3)
+MINES_XLSX = INPUT_DIR / "Mining operations - Vale.xlsx"
+MINES_SHEET = "DB"
+K_NEAREST = 3            # nº de estações combinadas por IDW
+MIN_DAYS_PER_YEAR = 30   # cobertura mínima p/ uma estação qualificar num ano
+MINE_CSV = OUTPUT_DIR / "mine_daily.csv"
+
+# Fonte de dados — INMET
 URL_TEMPLATE = "https://portal.inmet.gov.br/uploads/dadoshistoricos/{year}.zip"
 START_YEAR = 2000
+
+# Fonte de dados — ENSO/ONI (NOAA/CPC)
+ONI_URL = "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt"
+ONI_CSV = OUTPUT_DIR / "oni_monthly.csv"
 
 # Valor sentinela de dado faltante no INMET
 MISSING = -9999

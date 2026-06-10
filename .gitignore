@@ -3,6 +3,9 @@ inmet.db
 inmet.db-wal
 inmet.db-shm
 .venv/
+.venv.zip
 __pycache__/
 *.pyc
 .idea/
+input/
+output/

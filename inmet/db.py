@@ -52,6 +52,15 @@ CREATE TABLE IF NOT EXISTS stations (
     altitude   REAL,
     updated_at TEXT
 );
+
+CREATE TABLE IF NOT EXISTS oni_monthly (
+    year       INTEGER NOT NULL,
+    month      INTEGER NOT NULL,
+    season     TEXT,
+    oni_anom   REAL,
+    enso_phase TEXT,
+    PRIMARY KEY (year, month)
+);
 """
 
 
@@ -103,6 +112,22 @@ def upsert_daily(conn: sqlite3.Connection, df: pd.DataFrame) -> int:
         "INSERT OR REPLACE INTO weather_daily "
         "(year, month, day, date, region, state, station, city, rainfall_mm, temperature_c) "
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        rows,
+    )
+    return len(rows)
+
+
+def upsert_oni(conn: sqlite3.Connection, df: pd.DataFrame) -> int:
+    """Insere/substitui linhas ONI. Espera [year, month, season, oni_anom, enso_phase]."""
+    rows = [
+        (int(r.year), int(r.month), r.season,
+         None if pd.isna(r.oni_anom) else float(r.oni_anom),
+         r.enso_phase)
+        for r in df.itertuples(index=False)
+    ]
+    conn.executemany(
+        "INSERT OR REPLACE INTO oni_monthly (year, month, season, oni_anom, enso_phase) "
+        "VALUES (?, ?, ?, ?, ?);",
         rows,
     )
     return len(rows)
